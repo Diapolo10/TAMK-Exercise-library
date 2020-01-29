@@ -1,8 +1,8 @@
 // utility.h - contains declarations of various utility functions
 
-/**
+/*
  * LICENSE - The MIT License
- * Copyright 2019, Lari Liuhamo @ TAMK
+ * Copyright 2020, Lari Liuhamo @ TAMK
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -23,8 +23,10 @@
 #pragma once
 
 #include <functional>
-#include <vector>
+#include <iostream>
+#include <sstream>
 #include <string>
+#include <vector>
 
 namespace non_std {
 
@@ -35,7 +37,7 @@ namespace non_std {
 	// auto foo = string_split("Number #{}: ", "{}");
 	//
 	// returns: std::vector<std::string> {"Number #", ": "}
-	std::vector<std::string> string_split(std::string s, std::string delimiter) {
+	std::vector<std::string> string_split(const std::string s, const std::string delimiter) {
 		size_t pos_start = 0, pos_end, delim_len = delimiter.length();
 		std::string token;
 		std::vector<std::string> res;
@@ -48,6 +50,15 @@ namespace non_std {
 
 		res.push_back(s.substr(pos_start));
 		return res;
+	}
+
+	template<typename T>
+	std::string string_join(T<T::value_type> values, std::string delimiter=", ") {
+		std::vector< int > a(array, array + 6);
+		std::stringstream dataString;
+		std::ostream_iterator<T::value_type> output_iterator(dataString, delimiter); // here ";" is delimiter 
+		std::copy(values.begin(), values.end(), output_iterator);
+		return dataString.str();
 	}
 
 	// Simple functions that take individual parameters
@@ -161,12 +172,12 @@ namespace non_std {
 		//
 		// The function assumes the iterable is shorter than 2^32-1
 		template <typename T>
-		typename T func_map(std::function<typename T::value_type(typename T::value_type)>& func, T iterable) {
+		typename T func_map(std::function<typename T::value_type(typename T::value_type)>& func, const T iterable) {
 			
 			T result = {};
-			long idx = 0L;
+			size_t idx = 0L;
 
-			for (auto value : iterable) {
+			for (const auto& value : iterable) {
 				result[idx++] = func(value);
 			}
 
@@ -188,13 +199,13 @@ namespace non_std {
 		// 
 		// returns: (int)10
 		template <typename T>
-		typename T::value_type sum(T iterable) {
+		typename T::value_type sum(const T iterable) {
 			/* Adds up the contents of any iterable type T, returns the sum of its contents
 			 * as type T::value_type.
 			 */
 			typename T::value_type result = {};
 
-			for (auto num : iterable) {
+			for (const auto& num : iterable) {
 				result += num;
 			}
 
@@ -212,11 +223,31 @@ namespace non_std {
 		// by a space. A newline is appended
 		// at the end, and the buffer is flushed.
 		template <typename T>
-		void print_iterable(T iterable) {
+		void print_iterable(const T iterable) {
 			for (auto val : iterable) {
 				std::cout << val << " ";
 			}
 			std::cout << std::endl;
+		}
+
+		template<typename T>
+		T get_input(const std::string prompt) {
+			T input{};
+
+			while (true) {
+				std::cout << prompt;
+				
+				if (!(std::cin >> input)) {
+					std::cerr << u8"Invalid input.\n\n";
+					std::cin.clear();
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+					continue;
+				}
+
+				break;
+			}
+
+			return input;
 		}
 
 		// Get input of type T from the user n times, using a formatted std::string prompt.
@@ -230,7 +261,7 @@ namespace non_std {
 		// >>> Number #3: 12
 		// returns: std::vector<int> {3, 7, 12}
 		template <typename T>
-		std::vector<T> get_n_input(long n, std::string prompt) {
+		std::vector<T> get_n_input(long n, const std::string prompt) {
 			/* Gets n inputs from the user; returns a std::vector of type T
 			 *
 			 * prompt is a formattable std::string, where '{}' is used as a
