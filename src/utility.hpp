@@ -184,7 +184,7 @@ namespace non_std {
 		template <typename T>
 		typename T fmap(std::function<typename T::value_type(typename T::value_type)>& func, const T& iterable) {
 			
-			T result = {};
+			T result{};
 			size_t idx = 0L;
 
 			for (const auto& value : iterable) {
@@ -285,10 +285,15 @@ namespace non_std {
 			std::vector<std::string> split_prompt = string_split(prompt, (std::string)"{}");
 
 			do {
-				std::cout << split_prompt.front() << num_counter++ << split_prompt.back();
-				std::cin >> input;
+				std::stringstream formatted_prompt;
+				formatted_prompt << split_prompt.front() << num_counter++ << split_prompt.back();
 
+				input = get_input<T>(formatted_prompt.str());
 				result.push_back(input);
+
+				// Empties stringstream
+				formatted_prompt.clear();
+				formatted_prompt.str(std::string());
 
 			} while (num_counter <= n);
 
