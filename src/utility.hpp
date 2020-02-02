@@ -55,7 +55,7 @@ namespace non_std {
 		return res;
 	}
 
-	template<typename T>
+	template <typename T>
 	std::string join(const T& values, const std::string& delimiter=", ") {
 		std::string res;
 		res.reserve(sizeof(T::value_type));
