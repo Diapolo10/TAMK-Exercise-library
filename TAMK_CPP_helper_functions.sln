@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TAMK_CPP_helper_functions", "TAMK_CPP_helper_functions.vcxproj", "{49AD9DAF-7AC3-47DA-A2D5-2E709BB909FA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Library_unit_tests", "Library_unit_tests\Library_unit_tests.vcxproj", "{AF5E92DD-EDBD-4D29-90F4-25B569591F51}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tests", "tests\tests.vcxproj", "{AF5E92DD-EDBD-4D29-90F4-25B569591F51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

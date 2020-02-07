@@ -1,4 +1,5 @@
 // utility.h - contains declarations of various utility functions
+// Target specification: C++17
 
 /*
  * LICENSE - The MIT License
