@@ -318,6 +318,16 @@ namespace non_std {
 			return result;
 		}
 
+		// A Python-like print function, currently at prototype stage
+		template <typename T> [[deprecated("Unfinished and may not work correctly")]]
+		void println(std::string text, std::ostream& file=std::cout, std::string sep=" ", std::string end="\n") {
+			file << text << end;
+		}
+		template <typename T, typename... Args> [[deprecated("Unfinished and may not work correctly")]]
+		void println(std::string text, Args... args, std::ostream& file = std::cout, std::string sep = " ", std::string end = "\n") {
+			file << text << end;
+		}
+
 	}
 
 }
