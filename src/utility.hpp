@@ -1,4 +1,5 @@
-// utility.h - contains declarations of various utility functions
+// utility.hpp - contains declarations of various utility functions
+// Target specification: C++17
 
 /*
  * LICENSE - The MIT License
@@ -22,11 +23,17 @@
 
 #pragma once
 
+#include <algorithm>
 #include <functional>
 #include <iostream>
+#include <iterator>
+#include <numeric>
 #include <sstream>
 #include <string>
+#include <type_traits>
 #include <vector>
+
+#include "utility.tpp"
 
 namespace non_std {
 
@@ -37,8 +44,8 @@ namespace non_std {
 	// auto foo = string_split("Number #{}: ", "{}");
 	//
 	// returns: std::vector<std::string> {"Number #", ": "}
-	std::vector<std::string> string_split(const std::string s, const std::string delimiter) {
-		size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+	std::vector<std::string> string_split(std::string& s, std::string delimiter) {
+		size_t pos_start{}, pos_end, delim_len = delimiter.length();
 		std::string token;
 		std::vector<std::string> res;
 
@@ -52,13 +59,23 @@ namespace non_std {
 		return res;
 	}
 
-	template<typename T>
-	std::string string_join(T<T::value_type> values, std::string delimiter=", ") {
-		std::vector< int > a(array, array + 6);
-		std::stringstream dataString;
-		std::ostream_iterator<T::value_type> output_iterator(dataString, delimiter); // here ";" is delimiter 
-		std::copy(values.begin(), values.end(), output_iterator);
-		return dataString.str();
+	template <typename T>
+	std::string string_join(T values, std::string delimiter=", ") {
+
+		// TODO: Improve this to work with any type
+		static_assert(std::is_same<T::value_type, std::string>::value);
+
+		std::string res;
+		res.reserve(sizeof(T::value_type));
+
+		for (auto& value : values) {
+			res.append(value);
+			if (value != values.back()) {
+				res.append(delimiter);
+			}
+		}
+
+		return res;
 	}
 
 	// Simple functions that take individual parameters
@@ -79,25 +96,25 @@ namespace non_std {
 
 		// A function wrapper for addition
 		template <typename T>
-		T add(T num1, T num2) {
+		T add(const T num1, const T num2) {
 			return num1 + num2;
 		}
 
 		// A function wrapper for substraction
 		template <typename T>
-		T sub(T num1, T num2) {
+		T sub(const T num1, const T num2) {
 			return num1 - num2;
 		}
 
 		// A function wrapper for multiplication
 		template <typename T>
-		T mul(T num1, T num2) {
+		T mul(const T num1, const T num2) {
 			return num1 * num2;
 		}
 
 		// A function wrapper for division
 		template <typename T>
-		T div(T num1, T num2) {
+		T div(const T num1, const T num2) {
 			if (num2 != 0) {
 				return num1 / num2;
 			}
@@ -106,7 +123,7 @@ namespace non_std {
 
 		// A function wrapper for modulus
 		template <typename T>
-		T mod(T num1, T num2) {
+		T mod(const T num1, const T num2) {
 			return num1 % num2;
 		}
 
@@ -126,10 +143,10 @@ namespace non_std {
 		// std::vector<int> foo = {1, 2, 4, -7};
 		// auto bar = max(foo);
 		// 
-		// returns: (int)4
+		// returns: int{4}
 		template <typename T>
-		typename T::value_type max(T iterable) {
-			/* Takes an iterable of type T, returns the highest value of type T */
+		typename T::value_type max(const T& iterable) {
+			/* Takes an iterable of type T, returns the highest value of type T::value_type */
 
 			auto current_max = iterable[0];
 
@@ -150,9 +167,9 @@ namespace non_std {
 		// std::vector<int> foo = {1, 2, 4, -7};
 		// auto bar = min(foo);
 		// 
-		// returns: (int)-7
+		// returns: int{-7}
 		template <typename T>
-		typename T::value_type min(T iterable) {
+		typename T::value_type min(const T& iterable) {
 			/* Takes an iterable of type T, returns the highest value of type T */
 
 			auto current_min = iterable[0];
@@ -169,16 +186,13 @@ namespace non_std {
 		// Maps a modifier and an iterable of type T, returns
 		// a new instance of an iterable of type T with the modified results.
 		// Should work similiarly to Python's map-function
-		//
-		// The function assumes the iterable is shorter than 2^32-1
 		template <typename T>
-		typename T func_map(std::function<typename T::value_type(typename T::value_type)>& func, const T iterable) {
+		typename T fmap(typename T::value_type func(typename T::value_type), const T& iterable) {
 			
-			T result = {};
-			size_t idx = 0L;
+			T result{};
 
 			for (const auto& value : iterable) {
-				result[idx++] = func(value);
+				result.insert(result.end(), func(value));
 			}
 
 			return result;
@@ -197,9 +211,9 @@ namespace non_std {
 		// std::vector<int> foo = {1, 2, 3, 4};
 		// auto bar = sum(foo);
 		// 
-		// returns: (int)10
+		// returns: int{10}
 		template <typename T>
-		typename T::value_type sum(const T iterable) {
+		typename T::value_type sum(const T& iterable) {
 			/* Adds up the contents of any iterable type T, returns the sum of its contents
 			 * as type T::value_type.
 			 */
@@ -223,7 +237,7 @@ namespace non_std {
 		// by a space. A newline is appended
 		// at the end, and the buffer is flushed.
 		template <typename T>
-		void print_iterable(const T iterable) {
+		void print_iterable(const T& iterable) {
 			for (auto val : iterable) {
 				std::cout << val << " ";
 			}
@@ -231,7 +245,7 @@ namespace non_std {
 		}
 
 		template<typename T>
-		T get_input(const std::string prompt) {
+		T get_input(const std::string& prompt) {
 			T input{};
 
 			while (true) {
@@ -247,7 +261,21 @@ namespace non_std {
 				break;
 			}
 
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
 			return input;
+		}
+
+		std::string get_input_line(std::string& prompt) {
+		    std::vector<std::string> result{};
+			std::string input{};
+
+			while ((input = get_input<std::string>(prompt)).back() != '\n') {
+				result.push_back(input);
+			}
+
+			return non_std::string_join(result, " ");
 		}
 
 		// Get input of type T from the user n times, using a formatted std::string prompt.
@@ -261,7 +289,7 @@ namespace non_std {
 		// >>> Number #3: 12
 		// returns: std::vector<int> {3, 7, 12}
 		template <typename T>
-		std::vector<T> get_n_input(long n, const std::string prompt) {
+		std::vector<T> get_n_input(const long n, std::string& prompt) {
 			/* Gets n inputs from the user; returns a std::vector of type T
 			 *
 			 * prompt is a formattable std::string, where '{}' is used as a
@@ -275,10 +303,15 @@ namespace non_std {
 			std::vector<std::string> split_prompt = string_split(prompt, (std::string)"{}");
 
 			do {
-				std::cout << split_prompt.front() << num_counter++ << split_prompt.back();
-				std::cin >> input;
+				std::stringstream formatted_prompt;
+				formatted_prompt << split_prompt.front() << num_counter++ << split_prompt.back();
 
+				input = get_input<T>(formatted_prompt.str());
 				result.push_back(input);
+
+				// Empties stringstream
+				formatted_prompt.clear();
+				formatted_prompt.str(std::string());
 
 			} while (num_counter <= n);
 
