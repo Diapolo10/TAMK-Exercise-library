@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TAMK_CPP_helper_functions", "TAMK_CPP_helper_functions.vcxproj", "{49AD9DAF-7AC3-47DA-A2D5-2E709BB909FA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tests", "tests\tests.vcxproj", "{AF5E92DD-EDBD-4D29-90F4-25B569591F51}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -23,14 +21,6 @@ Global
 		{49AD9DAF-7AC3-47DA-A2D5-2E709BB909FA}.Release|x64.Build.0 = Release|x64
 		{49AD9DAF-7AC3-47DA-A2D5-2E709BB909FA}.Release|x86.ActiveCfg = Release|Win32
 		{49AD9DAF-7AC3-47DA-A2D5-2E709BB909FA}.Release|x86.Build.0 = Release|Win32
-		{AF5E92DD-EDBD-4D29-90F4-25B569591F51}.Debug|x64.ActiveCfg = Debug|x64
-		{AF5E92DD-EDBD-4D29-90F4-25B569591F51}.Debug|x64.Build.0 = Debug|x64
-		{AF5E92DD-EDBD-4D29-90F4-25B569591F51}.Debug|x86.ActiveCfg = Debug|Win32
-		{AF5E92DD-EDBD-4D29-90F4-25B569591F51}.Debug|x86.Build.0 = Debug|Win32
-		{AF5E92DD-EDBD-4D29-90F4-25B569591F51}.Release|x64.ActiveCfg = Release|x64
-		{AF5E92DD-EDBD-4D29-90F4-25B569591F51}.Release|x64.Build.0 = Release|x64
-		{AF5E92DD-EDBD-4D29-90F4-25B569591F51}.Release|x86.ActiveCfg = Release|Win32
-		{AF5E92DD-EDBD-4D29-90F4-25B569591F51}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
