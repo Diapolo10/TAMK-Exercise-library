@@ -3,7 +3,7 @@
 
 /*
  * LICENSE - The MIT License
- * Copyright 2020, Lari Liuhamo @ TAMK
+ * Copyright 2019, Lari Liuhamo @ TAMK
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -118,7 +118,8 @@ namespace non_std {
 			if (num2 != 0) {
 				return num1 / num2;
 			}
-			throw "Cannot divide by zero";
+			std::cerr << "Cannot divide by zero\n";
+			return 0;
 		}
 
 		// A function wrapper for modulus
